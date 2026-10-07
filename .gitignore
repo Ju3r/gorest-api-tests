@@ -1,0 +1,6 @@
+# Other local secrets and files
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store

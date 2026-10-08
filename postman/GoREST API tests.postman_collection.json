@@ -1,0 +1,709 @@
+{
+  "info": {
+    "_postman_id": "d8a24a99-b012-4699-b873-465ceb38f6b5",
+    "name": "GoREST API tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "24850118"
+  },
+  "item": [
+    {
+      "name": "API endpoints",
+      "item": [
+        {
+          "name": "GET /users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{BEARER_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/users",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "Generated from cURL: curl -H \"Authorization: {{bearer_token_0fo1}}\" \\\r\n     https://gorest.co.in/public/v2/users"
+          },
+          "response": []
+        },
+        {
+          "name": "POST /users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const createSuccessStatusCode = 201;\r\n\r\npm.test(`Status code is ${createSuccessStatusCode}`, function () {\r\n    pm.response.to.have.status(createSuccessStatusCode);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{BEARER_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"{{$randomFirstName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"gender\": \"{{USER_GENDER}}\",\r\n    \"status\": \"{{USER_STATUS}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/users",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /users/{{USER_ID}}",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "genders = [\"male\", \"female\"]\r\n\r\npm.environment.set(\"USER_GENDER\", _.sample(genders))"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const statusCodeSuccess = 200;\r\n\r\npm.test(`Status code is ${statusCodeSuccess}`, function () {\r\n    pm.response.to.have.status(statusCodeSuccess);\r\n});\r\n\r\npm.test(\"Response body contains correct gender\", function () {\r\n    const jsonData = pm.response.json();\r\n    const gender = jsonData.gender;\r\n\r\n    pm.expect(gender).to.eql(pm.environment.get(\"USER_GENDER\"));\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{BEARER_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"{{$randomFirstName}}\",\r\n    \"gender\": \"{{USER_GENDER}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/users/{{USER_ID}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "users",
+                "{{USER_ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /users/{{USER_ID}}",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const deleteSuccessStatusCode = 204;\r\n\r\npm.test(`DELETE returns ${deleteSuccessStatusCode}`, function () {\r\n    pm.response.to.have.status(deleteSuccessStatusCode);\r\n});\r\n\r\npm.test(\"Response body is empty\", function () {\r\n    pm.expect(pm.response.text()).to.be.empty;\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{BEARER_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/users/{{USER_ID}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "users",
+                "{{USER_ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /users/{{USER_ID}}",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const notFoundStatusCode = 404;\r\n\r\npm.test(`Deleted user returns ${notFoundStatusCode}`, function () {\r\n    pm.response.to.have.status(notFoundStatusCode);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{BEARER_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/users/{{USER_ID}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "users",
+                "{{USER_ID}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Testing scenarios",
+      "item": [
+        {
+          "name": "Create User and verify",
+          "item": [
+            {
+              "name": "GET /users?email={{SCENARIO_USER_EMAIL}} (check before creation: user does not exist)",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const countOfEmailLetter = 15;\r\nconst startSubstringCount = 2;\r\nconst endSubstringCount = 15;\r\n\r\nconst qaPrefix = 'aqa.'\r\nconst emailPrefix = Math.random().toString(countOfEmailLetter).substring(startSubstringCount, endSubstringCount);\r\nconst emailPostfix = '@test.com';\r\n\r\nconst email = qaPrefix + emailPrefix + emailPostfix;\r\n\r\npm.environment.set(\"SCENARIO_USER_EMAIL\", email);"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const statusCodeSuccess = 200;\r\nconst outOfUsers = 0;\r\nconst users = pm.response.json();\r\n\r\npm.test(`Status code is ${statusCodeSuccess}`, function () {\r\n    pm.response.to.have.status(statusCodeSuccess);\r\n});\r\n\r\npm.test(\"No user with the generated email exists before POST\", function () {\r\n    pm.expect(users.length, \"filtered results for the generated email\").to.eql(outOfUsers);\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{BEARER_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/users?email={{SCENARIO_USER_EMAIL}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "email",
+                      "value": "{{SCENARIO_USER_EMAIL}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "POST /users (create)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const createdUser = pm.response.json();\r\n\r\npm.test(\"Status code is 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Get ID\", function () {\r\n    const id = createdUser.id;\r\n\r\n    pm.environment.set(\"SCENARIO_USER_ID\", id);\r\n});\r\n\r\npm.test(\"Response contains the generated user data and an ID\", function () {\r\n    pm.expect(createdUser.email).to.eql(pm.environment.get(\"SCENARIO_USER_EMAIL\"));\r\n    pm.expect(createdUser.name).to.eql(pm.environment.get(\"SCENARIO_USER_NAME\"));\r\n    pm.expect(createdUser.gender).to.eql(pm.environment.get(\"SCENARIO_USER_GENDER\"));\r\n    pm.expect(createdUser.status).to.eql(pm.environment.get(\"SCENARIO_USER_STATUS\"));\r\n    pm.expect(createdUser.id).to.exist;\r\n});\r\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{BEARER_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"{{SCENARIO_USER_NAME}}\",\r\n    \"email\": \"{{SCENARIO_USER_EMAIL}}\",\r\n    \"gender\": \"{{SCENARIO_USER_GENDER}}\",\r\n    \"status\": \"{{SCENARIO_USER_STATUS}}\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/users",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET /users?email={{SCENARIO_USER_EMAIL}} (check after creation)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const statusCodeSuccess = 200;\r\nconst users = pm.response.json();\r\nconst userIndex = 0;\r\nconst correctLengthOfArray = 1;\r\n\r\npm.test(`Status code is ${statusCodeSuccess}`, function () {\r\n    pm.response.to.have.status(statusCodeSuccess);\r\n});\r\n\r\npm.test(\"Only one user with the generated email exists\", function () {\r\n    pm.expect(users.length, \"filtered results for the generated email\").to.eql(correctLengthOfArray);\r\n});\r\n\r\npm.test(\"Created user appears in the list\", function () {\r\n    const scenarioId = pm.environment.get(\"SCENARIO_USER_ID\");\r\n    pm.expect(String(users[userIndex].id)).to.eql(String(scenarioId));\r\n})"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{BEARER_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/users?email={{SCENARIO_USER_EMAIL}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "email",
+                      "value": "{{SCENARIO_USER_EMAIL}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET /users/{{CREATE_USER_ID}}",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const statusCodeSuccess = 200;\r\nconst user = pm.response.json();\r\n\r\npm.test(`Status code is ${statusCodeSuccess}`, function () {\r\n    pm.response.to.have.status(statusCodeSuccess);\r\n});\r\n\r\npm.test(\"GET by ID returns the user created in this scenario\", function () {\r\n    pm.expect(String(user.id)).to.eql(String(pm.environment.get(\"SCENARIO_USER_ID\")));\r\n    pm.expect(user.email).to.eql(pm.environment.get(\"SCENARIO_USER_EMAIL\"));\r\n    pm.expect(user.name).to.eql(pm.environment.get(\"SCENARIO_USER_NAME\"));\r\n    pm.expect(user.gender).to.eql(pm.environment.get(\"SCENARIO_USER_GENDER\"));\r\n    pm.expect(user.status).to.eql(pm.environment.get(\"SCENARIO_USER_STATUS\"));\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{BEARER_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/users/{{SCENARIO_USER_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{SCENARIO_USER_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Edit User and verify",
+          "item": [
+            {
+              "name": "GET /users/{{SCENARIO_USER_ID}} (check before editing)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const statusCodeSuccess = 200;\r\nconst user = pm.response.json();\r\nconst scenarioId = pm.environment.get(\"SCENARIO_USER_ID\")\r\n\r\npm.test(`Status code is ${statusCodeSuccess}. User exists before update`, function () {\r\n    pm.response.to.have.status(statusCodeSuccess);\r\n});\r\n\r\npm.test(\"User appears\", function () {\r\n    pm.expect(String(user.id)).to.eql(String(scenarioId));\r\n});\r\n\r\nif (pm.response.code === statusCodeSuccess && user.id === scenarioId) {\r\n    pm.environment.set(\"SCENARIO_UPDATED_NAME\", `${user.name} Updated`);\r\n    pm.environment.set(\"SCENARIO_UPDATED_GENDER\", user.gender === \"male\" ? \"female\" : \"male\");\r\n}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{BEARER_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/users/{{SCENARIO_USER_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{SCENARIO_USER_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "PUT /users/{{SCENARIO_USER_ID}} (edit)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const statusCodeSuccess = 200;\r\nconst user = pm.response.json();\r\nconst scenarioId = pm.environment.get(\"SCENARIO_USER_ID\")\r\n\r\npm.test(`PUT returns ${statusCodeSuccess}`, function () {\r\n    pm.response.to.have.status(statusCodeSuccess);\r\n});\r\n\r\npm.test(\"PUT response contains updated fields and preserves the rest\", function () {\r\n    pm.expect(String(user.id)).to.eql(String(scenarioId));\r\n    pm.expect(user.name).to.eql(pm.environment.get(\"SCENARIO_UPDATED_NAME\"));\r\n    pm.expect(user.gender).to.eql(pm.environment.get(\"SCENARIO_UPDATED_GENDER\"));\r\n    pm.expect(user.email).to.eql(pm.environment.get(\"SCENARIO_USER_EMAIL\"));\r\n    pm.expect(user.status).to.eql(pm.environment.get(\"SCENARIO_USER_STATUS\"));\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{BEARER_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"{{SCENARIO_UPDATED_NAME}}\",\r\n  \"email\": \"{{SCENARIO_USER_EMAIL}}\",\r\n  \"gender\": \"{{SCENARIO_UPDATED_GENDER}}\",\r\n  \"status\": \"{{SCENARIO_USER_STATUS}}\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/users/{{SCENARIO_USER_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{SCENARIO_USER_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET /users{{SCENARIO_USER_ID}} (check after editing)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const statusCodeSuccess = 200;\r\nconst user = pm.response.json();\r\nconst scenarioId = pm.environment.get(\"SCENARIO_USER_ID\")\r\n\r\npm.test(`GET after update returns ${statusCodeSuccess}`, function () {\r\n    pm.response.to.have.status(statusCodeSuccess);\r\n});\r\n\r\npm.test(\"Updated values are persisted on the server\", function () {\r\n    pm.expect(String(user.id)).to.eql(String(scenarioId));\r\n    pm.expect(user.name).to.eql(pm.environment.get(\"SCENARIO_UPDATED_NAME\"));\r\n    pm.expect(user.gender).to.eql(pm.environment.get(\"SCENARIO_UPDATED_GENDER\"));\r\n    pm.expect(user.email).to.eql(pm.environment.get(\"SCENARIO_USER_EMAIL\"));\r\n    pm.expect(user.status).to.eql(pm.environment.get(\"SCENARIO_USER_STATUS\"));\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{BEARER_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/users/{{SCENARIO_USER_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{SCENARIO_USER_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Delete User and verify",
+          "item": [
+            {
+              "name": "GET /users/{{SCENARIO_USER_ID}} (check before deleting)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const statusCodeSuccess = 200;\r\nconst user = pm.response.json();\r\nconst scenarioId = pm.environment.get(\"SCENARIO_USER_ID\")\r\n\r\npm.test(`Status code is ${statusCodeSuccess}. User exists before update`, function () {\r\n    pm.response.to.have.status(statusCodeSuccess);\r\n});\r\n\r\npm.test(\"User appears\", function () {\r\n    pm.expect(String(user.id)).to.eql(String(scenarioId));\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{BEARER_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/users/{{SCENARIO_USER_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{SCENARIO_USER_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DELETE /users/{{SCENARIO_USER_ID}} (delete)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const deleteSuccessStatusCode = 204;\r\n\r\npm.test(`DELETE returns ${deleteSuccessStatusCode}`, function () {\r\n    pm.response.to.have.status(deleteSuccessStatusCode);\r\n});\r\n\r\npm.test(\"DELETE response body is empty\", function () {\r\n    pm.expect(pm.response.text()).to.be.empty;\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{BEARER_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/users/{{SCENARIO_USER_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{SCENARIO_USER_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET /users/{{SCENARIO_USER_ID}} (check after deleting)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const notFoundStatusCode = 404;\r\n\r\npm.test(`Deleted user returns ${notFoundStatusCode}`, function () {\r\n    pm.response.to.have.status(notFoundStatusCode);\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{BEARER_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/users/{{SCENARIO_USER_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{SCENARIO_USER_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
